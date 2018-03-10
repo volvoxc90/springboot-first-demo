@@ -18,6 +18,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // ********JdbcTemplace*************
+
     /**
      * 测试接口
      * http://localhost:8080/user/2
@@ -112,6 +114,25 @@ public class UserController {
             }
         } catch (Exception e) {
             return new WebResult("ERROR", e.getClass().getName());
+        }
+    }
+
+
+    // ****************************************************************** Mybatis ******************************************************************
+
+    /**
+     * 测试接口
+     * http://localhost:8080/user2/2
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user2/{id}", method = RequestMethod.GET)
+    public WebResult getUserById2(@PathVariable("id")Integer id) {
+        try {
+            User user = userService.getUserById(id);
+            return new WebResult("SUCCESS", user);
+        } catch (Exception e) {
+            return new WebResult("FAILE", e.getClass().getName());
         }
     }
 }

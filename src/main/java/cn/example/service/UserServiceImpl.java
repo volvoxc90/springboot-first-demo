@@ -1,7 +1,7 @@
 package cn.example.service;
 
 import cn.example.domain.User;
-import cn.example.dao.UserDao;
+import cn.example.mapper.UserMapper;
 import cn.example.utils.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +13,10 @@ import java.util.List;
  * @create 2018-03-09 16:49
  **/
 @Service
-public class UserServiceImpl implements  UserService {
+public class UserServiceImpl implements UserService {
 
-    @Autowired
+    // ****************************************************************** jdbcTemplace ******************************************************************
+    /*@Autowired
     private UserDao userDao;
 
     @Override
@@ -42,5 +43,36 @@ public class UserServiceImpl implements  UserService {
     @Override
     public int delete(Integer id) {
         return userDao.delete(id);
+    }*/
+
+//    ****************************************************************** Mybatis ******************************************************************
+
+
+    @Autowired
+    UserMapper userMapper;
+    @Override
+    public User getUserById(Integer id) {
+        return userMapper.getUserById(id);
+    }
+
+    @Override
+    public ServiceResult<List<User>> getUserList() {
+        ServiceResult<List<User>> result = userMapper.getUserList();
+        return new ServiceResult<>("SUCCESS", result.getResult());
+    }
+
+    @Override
+    public int add(User user) {
+        return userMapper.add(user);
+    }
+
+    @Override
+    public int update(Integer id, User user) {
+        return userMapper.update(id, user);
+    }
+
+    @Override
+    public int delete(Integer id) {
+        return userMapper.delete(id);
     }
 }
