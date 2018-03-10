@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author zhugp
  * @create 2018-03-09 16:58
+ * Restful 模式
  **/
 @RestController
 public class UserController {
@@ -17,8 +18,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 测试接口
+     * http://localhost:8080/user/2
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "user/{id}", method = RequestMethod.GET)
-    public WebResult getUserById(@PathVariable(value = "id") Integer id) {
+    public WebResult getUserById(@PathVariable("id") Integer id) {
         try {
             User user = userService.getUserById(id);
             return new WebResult("SUCCESS", user);
@@ -27,6 +34,11 @@ public class UserController {
         }
     }
 
+    /**
+     * 测试接口
+     * http://localhost:8080/users
+     * @return
+     */
     @RequestMapping(value = "users", method = RequestMethod.GET)
     public WebResult getUserList() {
         try {
@@ -37,6 +49,14 @@ public class UserController {
         }
     }
 
+    /**
+     * 测试接口
+     * http://localhost:8080/user
+     * {"username":"张馨","age":29}
+     *
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "user", method = RequestMethod.POST)
     public WebResult add(@RequestBody User user) {
         WebResult result = new WebResult();
@@ -52,7 +72,16 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "user/{id}", method = RequestMethod.PATCH)
+    /**
+     * 测试接口
+     * http://localhost:8080/user/1
+     * {"username":"张馨","age":27}
+     *
+     * @param id
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
     public WebResult update(@PathVariable("id") Integer id, @RequestBody User user) {
         try {
             int num = userService.update(id, user);
@@ -66,6 +95,12 @@ public class UserController {
         }
     }
 
+    /**
+     * 测试接口
+     * http://localhost:8080/user/1
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "user/{id}", method = RequestMethod.DELETE)
     public WebResult delete(@PathVariable("id") Integer id) {
         try {

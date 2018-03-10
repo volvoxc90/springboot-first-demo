@@ -20,7 +20,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao {
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    JdbcTemplate jdbcTemplate;
 
     public User getUserById(Integer id) {
         List<User> list = jdbcTemplate.query("select * from tb_user where id = ?", new Object[]{id}, new BeanPropertyRowMapper<>(User.class));
@@ -43,7 +43,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public int update(Integer id, User user) {
-        return jdbcTemplate.update("update tb_user set username = ?, age = ? where id = ?", user.getUsername(), user.getAge(), user.getId());
+        return jdbcTemplate.update("update tb_user set username = ?, age = ? where id = ?", user.getUsername(), user.getAge(), id);
     }
 
     public int delete(Integer id) {
