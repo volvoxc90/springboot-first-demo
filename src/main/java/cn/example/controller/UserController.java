@@ -135,4 +135,14 @@ public class UserController {
             return new WebResult("FAILE", e.getClass().getName());
         }
     }
+
+    @RequestMapping(value = "users2", method = RequestMethod.GET)
+    public WebResult getUserList2() {
+        try {
+            ServiceResult result = userService.getUserList();
+            return new WebResult(result.getCode(), result.getResult());
+        } catch (Exception e) {
+            return new WebResult("ERROR", e.getClass().getName());
+        }
+    }
 }
