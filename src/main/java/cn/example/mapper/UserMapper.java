@@ -2,6 +2,7 @@ package cn.example.mapper;
 
 import cn.example.domain.User;
 import cn.example.utils.ServiceResult;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author zhugp
  * @create 2018-03-10 16:13
  **/
-@Component
+@Mapper
 public interface UserMapper {
     public User getUserById(Integer id);
 
