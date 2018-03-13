@@ -1,13 +1,8 @@
 package cn.example.mapper;
 
 import cn.example.domain.User;
-import cn.example.utils.ServiceResult;
-<<<<<<< HEAD
-import org.apache.ibatis.annotations.Param;
-=======
 import org.apache.ibatis.annotations.Mapper;
->>>>>>> 2f204bc6b43679711b60c7144b8edf525fd706f9
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,7 +14,7 @@ import java.util.List;
 public interface UserMapper {
     public User getUserById(Integer id);
 
-    public ServiceResult<List<User>> getUserList();
+    public List<User> getUserList();
 
     public int add(User user);
 
