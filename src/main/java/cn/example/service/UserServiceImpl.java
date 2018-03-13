@@ -6,6 +6,7 @@ import cn.example.utils.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Override
     public User getUserById(Integer id) {
         return userMapper.getUserById(id);
@@ -57,8 +58,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServiceResult<List<User>> getUserList() {
-        ServiceResult<List<User>> result = userMapper.getUserList();
-        return new ServiceResult<>("SUCCESS", result.getResult());
+        List<User> list = userMapper.getUserList();
+        ServiceResult result = new ServiceResult();
+        result.setResult(list);
+        return new ServiceResult("SUCCESS", result.getResult());
     }
 
     @Override

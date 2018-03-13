@@ -37,7 +37,7 @@
         UPDATE
         tb_user
         SET
-        username = #{user.username},age = #{user.age}
+        username = #{user.username},age = #{user.age}, ctm = now()
         WHERE
         id = #{id}
     </update>
