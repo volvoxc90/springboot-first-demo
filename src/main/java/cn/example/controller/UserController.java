@@ -4,8 +4,14 @@ import cn.example.domain.User;
 import cn.example.service.UserService;
 import cn.example.utils.ServiceResult;
 import cn.example.utils.WebResult;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhugp
@@ -15,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserController {
 
+    static Map<Integer, User> currentHashMap = new ConcurrentHashMap<>();
+
     @Autowired
     private UserService userService;
 
@@ -23,9 +31,12 @@ public class UserController {
     /**
      * 测试接口
      * http://localhost:8080/user/2
+     *
      * @param id
      * @return
      */
+    @ApiOperation(value = "根据id获取用户信息",  notes = "根据id获取用户信息")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path")
     @RequestMapping(value = "user/{id}", method = RequestMethod.GET)
     public WebResult getUserById(@PathVariable("id") Integer id) {
         try {
@@ -39,8 +50,14 @@ public class UserController {
     /**
      * 测试接口
      * http://localhost:8080/users
+     *
+     * CrossOrigin
+     *
      * @return
+     *
      */
+    @CrossOrigin
+    @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
     @RequestMapping(value = "users", method = RequestMethod.GET)
     public WebResult getUserList() {
         try {
@@ -59,6 +76,8 @@ public class UserController {
      * @param user
      * @return
      */
+    @ApiOperation(value = "添加用户", notes = "根据user对象添加用户")
+    @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User", paramType = "path")
     @RequestMapping(value = "user", method = RequestMethod.POST)
     public WebResult add(@RequestBody User user) {
         WebResult result = new WebResult();
@@ -83,6 +102,11 @@ public class UserController {
      * @param user
      * @return
      */
+    @ApiOperation(value = "修改用户", notes = "根据id修改指定用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path"),
+            @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User", paramType = "path")
+    })
     @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
     public WebResult update(@PathVariable("id") Integer id, @RequestBody User user) {
         try {
@@ -100,9 +124,12 @@ public class UserController {
     /**
      * 测试接口
      * http://localhost:8080/user/1
+     *
      * @param id
      * @return
      */
+    @ApiOperation(value = "删除用户", notes = "根据用户ID删除")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path")
     @RequestMapping(value = "user/{id}", method = RequestMethod.DELETE)
     public WebResult delete(@PathVariable("id") Integer id) {
         try {
@@ -123,11 +150,12 @@ public class UserController {
     /**
      * 测试接口
      * http://localhost:8080/user2/2
+     *
      * @param id
      * @return
      */
     @RequestMapping(value = "user2/{id}", method = RequestMethod.GET)
-    public WebResult getUserById2(@PathVariable("id")Integer id) {
+    public WebResult getUserById2(@PathVariable("id") Integer id) {
         try {
             User user = userService.getUserById(id);
             return new WebResult("SUCCESS", user);
@@ -141,6 +169,48 @@ public class UserController {
         try {
             ServiceResult result = userService.getUserList();
             return new WebResult(result.getCode(), result.getResult());
+        } catch (Exception e) {
+            return new WebResult("ERROR", e.getClass().getName());
+        }
+    }
+
+    @RequestMapping(value = "user2", method = RequestMethod.POST)
+    public WebResult add2(@RequestBody User user) {
+        try {
+            int num = userService.add(user);
+            if (num > 0) {
+                return new WebResult("SUCCESS", "添加成功");
+            } else {
+                return new WebResult("FAILE", "添加失败");
+            }
+        } catch (Exception e) {
+            return new WebResult("ERROR", e.getClass().getName());
+        }
+    }
+
+    @RequestMapping(value = "user2/{id}", method = RequestMethod.PUT)
+    public WebResult update2(@PathVariable("id") Integer id, @RequestBody User user) {
+        try {
+            int num = userService.update(id, user);
+            if (num > 0) {
+                return new WebResult("SUCCESS", "修改成功");
+            } else {
+                return new WebResult("FAILE", "修改失败");
+            }
+        } catch (Exception e) {
+            return new WebResult("ERROR", e.getClass().getName());
+        }
+    }
+
+    @RequestMapping(value = "user2/{id}", method = RequestMethod.DELETE)
+    public WebResult delete2(@PathVariable("id") Integer id) {
+        try {
+            int num = userService.delete(id);
+            if (num > 0) {
+                return new WebResult("SUCCESS", "删除成功");
+            } else {
+                return new WebResult("FAILE", "删除失败");
+            }
         } catch (Exception e) {
             return new WebResult("ERROR", e.getClass().getName());
         }
