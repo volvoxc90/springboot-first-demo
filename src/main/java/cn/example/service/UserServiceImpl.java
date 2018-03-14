@@ -5,6 +5,7 @@ import cn.example.mapper.UserMapper;
 import cn.example.utils.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * @create 2018-03-09 16:49
  **/
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     // ****************************************************************** jdbcTemplace ******************************************************************
@@ -66,16 +68,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int add(User user) {
+        if (user == null) {
+            return 0;
+        }
         return userMapper.add(user);
     }
 
     @Override
     public int update(Integer id, User user) {
+        if (id == null || user.getUsername() == null || user.getAge() < 0) {
+            return 0;
+        }
         return userMapper.update(id, user);
     }
 
     @Override
     public int delete(Integer id) {
+        if (id == null) {
+            return 0;
+        }
         return userMapper.delete(id);
     }
 }
