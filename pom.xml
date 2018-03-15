@@ -6,7 +6,10 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <groupId>com.example</groupId>
     <artifactId>springboot-first-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <modules>
+        <module>dubbo-provider</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>springboot-first-demo</name>
     <description>Demo project for Spring Boot</description>

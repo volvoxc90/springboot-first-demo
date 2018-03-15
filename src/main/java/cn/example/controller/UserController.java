@@ -4,6 +4,7 @@ import cn.example.domain.User;
 import cn.example.service.UserService;
 import cn.example.utils.ServiceResult;
 import cn.example.utils.WebResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create 2018-03-09 16:58
  * Restful 模式
  **/
+@Api(value = "UserController相关的API")
 @RestController
 public class UserController {
 
@@ -77,7 +79,7 @@ public class UserController {
      * @return
      */
     @ApiOperation(value = "添加用户", notes = "根据user对象添加用户")
-    @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User", paramType = "path")
+    @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User")
     @RequestMapping(value = "user", method = RequestMethod.POST)
     public WebResult add(@RequestBody User user) {
         WebResult result = new WebResult();
@@ -105,7 +107,7 @@ public class UserController {
     @ApiOperation(value = "修改用户", notes = "根据id修改指定用户")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "Integer", paramType = "path"),
-            @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User", paramType = "path")
+            @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User")
     })
     @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
     public WebResult update(@PathVariable("id") Integer id, @RequestBody User user) {
@@ -133,6 +135,10 @@ public class UserController {
     @RequestMapping(value = "user/{id}", method = RequestMethod.DELETE)
     public WebResult delete(@PathVariable("id") Integer id) {
         try {
+            User user = userService.getUserById(id);
+            if(user == null) {
+                return new WebResult("NON", "用户不存在，请重新输入id");
+            }
             int num = userService.delete(id);
             if (num > 0) {
                 return new WebResult("SUCCESS", "删除成功");
@@ -164,6 +170,7 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "获取用户列表", notes = "获取用户列表")
     @RequestMapping(value = "users2", method = RequestMethod.GET)
     public WebResult getUserList2() {
         try {
@@ -174,6 +181,8 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "添加用户", notes = "根据实体对象user添加用户")
+    @ApiImplicitParam(name = "user", value = "实体对象", required = true, dataType = "User")
     @RequestMapping(value = "user2", method = RequestMethod.POST)
     public WebResult add2(@RequestBody User user) {
         try {
@@ -188,6 +197,11 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "修改用户", notes = "根据用户ID修改用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path", dataType = "Integer"),
+            @ApiImplicitParam(name = "user", value = "用户实体对象", required = true, dataType = "User")
+            })
     @RequestMapping(value = "user2/{id}", method = RequestMethod.PUT)
     public WebResult update2(@PathVariable("id") Integer id, @RequestBody User user) {
         try {
@@ -202,9 +216,15 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "删除用户", notes = "根据用户ID删除用户")
+    @ApiImplicitParam(name = "id", value = "用户ID", required = true, paramType = "path", dataType = "Integer")
     @RequestMapping(value = "user2/{id}", method = RequestMethod.DELETE)
     public WebResult delete2(@PathVariable("id") Integer id) {
         try {
+            User user = userService.getUserById(id);
+            if (user == null) {
+                return new WebResult("NON", "用户不存在，请重新输入id");
+            }
             int num = userService.delete(id);
             if (num > 0) {
                 return new WebResult("SUCCESS", "删除成功");
