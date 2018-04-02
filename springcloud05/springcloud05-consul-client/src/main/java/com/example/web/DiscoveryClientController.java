@@ -1,5 +1,6 @@
 package com.example.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -15,10 +16,13 @@ import java.util.List;
 @RestController
 public class DiscoveryClientController {
 
+    @Autowired
     private final DiscoveryClient discoveryClient;
+
 
     private final String currentApplicationName;
 
+    @Autowired
     public DiscoveryClientController(DiscoveryClient discoveryClient,@Value("${spring.application.name}")
             String currentApplicationName) {
         this.discoveryClient = discoveryClient;
